@@ -48,7 +48,7 @@ namespace ProjetoTS
         }
         private void textBoxUsername_TextChanged(object sender, EventArgs e)
         {
-            /*
+            /*atualizado
             try
             {
                 if(textBoxUsername.Text == "")
