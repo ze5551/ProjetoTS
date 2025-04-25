@@ -9,20 +9,24 @@ using System.Net.Sockets;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using EI.SI;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
 namespace ProjetoTS
 {
     public partial class Form1: Form
     {
-        private const int PORT = 10000;
+        private const int PORT = 10001;
         NetworkStream networkStream;
         ProtocolSI protocolSI;
         TcpClient client;
 
-        
+
+
+
         /*
         private const string UsernameLabel = "Enter User Name";
         private const string passwordLabel = "Password";
@@ -37,13 +41,15 @@ namespace ProjetoTS
         {
             InitializeComponent();
 
+            
             IPEndPoint endpoint = new IPEndPoint(IPAddress.Loopback, PORT);
             client = new TcpClient();
             client.Connect(endpoint);
             networkStream = client.GetStream();
             protocolSI = new ProtocolSI();
 
-            
+
+
 
 
 
@@ -129,10 +135,53 @@ namespace ProjetoTS
             //var userdb = new UsersData();
             var username = textBoxUsername.Text;
             var password = textBoxPassword.Text;
-            string logintxt = username + "," + password;
+            
+
+
+            int clientCounter = 0;
+            string logintxt = username + "," + password+","+"1";
             // bool isLoggedIn = user.SetLogginTrue();
             byte[] packet = protocolSI.Make(ProtocolSICmdType.DATA,logintxt);
             networkStream.Write(packet, 0, packet.Length);
+            // Definição das variáveis na função principal.
+            
+            
+            MessageBox.Show("SERVER READY");
+            bool var = true;
+            
+            while (var)
+            {
+                // Definição da variável client do tipo TcpClient
+                string MSG;
+
+                // Incrementação do contador, de forma a que vá sempre somando 1 (+1)
+                clientCounter++;
+                // Apresentação da mensagem indicative do nº do client na linha de comandos 
+                MessageBox.Show("Client {0} connected "+ clientCounter);
+                int bytesRead = networkStream.Read(protocolSI.Buffer, 0, protocolSI.Buffer.Length);
+                
+                MSG = protocolSI.GetStringFromData();
+                MessageBox.Show("U..; "+protocolSI.GetStringFromData());
+                // Definição da variável clientHandler do tipo TcpClient
+                ClientHandler clientHandler = new ClientHandler(client, clientCounter);
+                clientHandler.Handle();
+                if(MSG != null)
+                {
+                    var = false;
+                }
+                else
+                {
+                    MessageBox.Show("Invalid User or Password");
+                }
+            }
+
+            // Iniciar o listener; apresentação da primeira mensagem na linha de comandos e inicialização do contador.
+            
+
+
+
+
+
             //var user = UsersData.user.FirstOrDefault(u => u.Username == username && u.Password == password);
             /*    
             if (user == null)
@@ -225,6 +274,50 @@ namespace ProjetoTS
                 return;
             }
             */
+            var username = textBoxUserSignUp.Text;
+            var password = textBoxPasswordSignUp.Text;
+            int clientCounter = 0;
+            string registertxt = username + "," + password + "," + "0";
+            // bool isLoggedIn = user.SetLogginTrue();
+            byte[] packet = protocolSI.Make(ProtocolSICmdType.DATA, registertxt);
+            networkStream.Write(packet, 0, packet.Length);
+            // Definição das variáveis na função principal.
+
+
+            MessageBox.Show("SERVER READY/regisar");
+            bool var = true;
+            
+            while (var)
+            {
+                // Definição da variável client do tipo TcpClient
+                string MSG;
+
+                // Incrementação do contador, de forma a que vá sempre somando 1 (+1)
+                clientCounter++;
+                // Apresentação da mensagem indicative do nº do client na linha de comandos 
+                MessageBox.Show("Client {0} connected " + clientCounter);
+                int bytesRead = networkStream.Read(protocolSI.Buffer, 0, protocolSI.Buffer.Length);
+
+                MSG = protocolSI.GetStringFromData();
+                MessageBox.Show("regs; " + protocolSI.GetStringFromData());
+                // Definição da variável clientHandler do tipo TcpClient
+                ClientHandler clientHandler = new ClientHandler(client, clientCounter);
+                clientHandler.Handle();
+                if (MSG != null)
+                {
+                    var = false;
+                }
+                else
+                {
+                    MessageBox.Show("Invalid User or Password");
+                }
+            
+            }
+
+
+
+
+
             using (var userdb = new UsersData())
             {
                 /*
@@ -322,4 +415,58 @@ namespace ProjetoTS
 
         }
     }
+    class ClientHandler
+    {
+        // Definição das variáveis client e clientID.
+        private TcpClient client;
+        private int clientID;
+        public ClientHandler(TcpClient client, int clientID)
+        {
+            this.client = client;
+            this.clientID = clientID;
+        }
+        public void Handle()
+        {
+            // Definição da variável thread e arranque da mesma
+            // Para relembrar: Threads são unidades de execução dentro de um processo; um conjunto de instruções.
+            Thread thread = new Thread(threadHandler);
+            thread.Start();
+        }
+        private void threadHandler()
+        {
+            // Definição das variáveis networkStream e protocolSI
+            NetworkStream networkStream = this.client.GetStream();
+            ProtocolSI protocolSI = new ProtocolSI();
+
+
+            // Ciclo a ser executado até ao fim da transmissão.
+            while (protocolSI.GetCmdType() != ProtocolSICmdType.EOT)
+            {
+                int bytesRead = networkStream.Read(protocolSI.Buffer, 0, protocolSI.Buffer.Length);
+                byte[] ack;
+
+                // "Alteração"/mudança entre a apresentação da mensagem e o fim da tranmissão.
+                switch (protocolSI.GetCmdType())
+                {
+                    //Dica do ALT
+                    case ProtocolSICmdType.DATA:
+                        Console.WriteLine("Client " + clientID + ": " + protocolSI.GetStringFromData());
+                        ack = protocolSI.Make(ProtocolSICmdType.ACK);
+                        networkStream.Write(ack, 0, ack.Length);
+                        break;
+
+                    case ProtocolSICmdType.EOT:
+                        Console.WriteLine("Ending Thread from Client {0}", clientID);
+                        ack = protocolSI.Make(ProtocolSICmdType.ACK);
+                        networkStream.Write(ack, 0, ack.Length);
+                        break;
+                }
+            }
+
+            // Fecho do networkStream e do cliente (TcpClient)
+            networkStream.Close();
+            client.Close();
+        }
+    }
+
 }
