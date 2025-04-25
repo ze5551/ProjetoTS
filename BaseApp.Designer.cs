@@ -30,10 +30,10 @@
         {
             this.LBContacts = new System.Windows.Forms.ListBox();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.LBLContactName = new System.Windows.Forms.Label();
             this.BTNSend = new System.Windows.Forms.Button();
             this.TBMsg = new System.Windows.Forms.TextBox();
             this.LBChat = new System.Windows.Forms.ListBox();
-            this.LBLContactName = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
@@ -58,6 +58,15 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(910, 538);
             this.panel1.TabIndex = 1;
+            // 
+            // LBLContactName
+            // 
+            this.LBLContactName.AutoSize = true;
+            this.LBLContactName.Location = new System.Drawing.Point(77, 10);
+            this.LBLContactName.Name = "LBLContactName";
+            this.LBLContactName.Size = new System.Drawing.Size(44, 16);
+            this.LBLContactName.TabIndex = 3;
+            this.LBLContactName.Text = "label1";
             // 
             // BTNSend
             // 
@@ -87,15 +96,7 @@
             this.LBChat.Name = "LBChat";
             this.LBChat.Size = new System.Drawing.Size(785, 388);
             this.LBChat.TabIndex = 0;
-            // 
-            // LBLContactName
-            // 
-            this.LBLContactName.AutoSize = true;
-            this.LBLContactName.Location = new System.Drawing.Point(77, 10);
-            this.LBLContactName.Name = "LBLContactName";
-            this.LBLContactName.Size = new System.Drawing.Size(44, 16);
-            this.LBLContactName.TabIndex = 3;
-            this.LBLContactName.Text = "label1";
+            this.LBChat.SelectedIndexChanged += new System.EventHandler(this.LBChat_SelectedIndexChanged);
             // 
             // label1
             // 

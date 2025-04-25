@@ -7,4 +7,14 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="EntityFramework" Version="6.5.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="ProtocolSI">
+      <HintPath>..\..\..\..\..\Documents\topicosDeSeguranca\Ficha3-Server\Ficha3-Server\ProtocolSI.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>

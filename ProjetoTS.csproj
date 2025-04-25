@@ -43,7 +43,7 @@
       <HintPath>packages\EntityFramework.6.5.1\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
     <Reference Include="ProtocolSI">
-      <HintPath>..\topicosDeSeguranca\Ficha3-Server\Ficha3-Server\ProtocolSI.dll</HintPath>
+      <HintPath>..\..\..\..\Documents\topicosDeSeguranca\Ficha3-Server\Ficha3-Server\ProtocolSI.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />

@@ -12,9 +12,18 @@ namespace ProjetoTS
 {
     public partial class BaseApp : Form
     {
+        private List<Message> Messages;
         public BaseApp()
         {
             InitializeComponent();
+            Messages = new List<Message>();
+            bool isLoggedIn = true;
+            if (isLoggedIn)
+            {
+                
+            }
+
+
         }
         private void BaseApp_Load(object sender, EventArgs e)
         {
@@ -27,6 +36,11 @@ namespace ProjetoTS
         }
 
         private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void LBChat_SelectedIndexChanged(object sender, EventArgs e)
         {
 
         }

@@ -4,16 +4,25 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Net;
+using System.Net.Sockets;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using EI.SI;
 
 namespace ProjetoTS
 {
     public partial class Form1: Form
     {
+        private const int PORT = 10000;
+        NetworkStream networkStream;
+        ProtocolSI protocolSI;
+        TcpClient client;
+
+        
         /*
         private const string UsernameLabel = "Enter User Name";
         private const string passwordLabel = "Password";
@@ -27,6 +36,17 @@ namespace ProjetoTS
         public Form1()
         {
             InitializeComponent();
+
+            IPEndPoint endpoint = new IPEndPoint(IPAddress.Loopback, PORT);
+            client = new TcpClient();
+            client.Connect(endpoint);
+            networkStream = client.GetStream();
+            protocolSI = new ProtocolSI();
+
+            
+
+
+
             /*
             textBoxUsername.Text = UsernameLabel;
             textBoxPassword.Text = passwordLabel;
@@ -102,14 +122,19 @@ namespace ProjetoTS
 
         private void btnLogin_Click(object sender, EventArgs e)
         {
-            
-                UsersData UsersData = new UsersData();
 
-                var userdb = new UsersData();
-                var username = textBoxUsername.Text;
-                var password = textBoxPassword.Text;
-                var user = UsersData.user.FirstOrDefault(u => u.Username == username && u.Password == password);
-                
+            
+            //UsersData UsersData = new UsersData();
+
+            //var userdb = new UsersData();
+            var username = textBoxUsername.Text;
+            var password = textBoxPassword.Text;
+            string logintxt = username + "," + password;
+            // bool isLoggedIn = user.SetLogginTrue();
+            byte[] packet = protocolSI.Make(ProtocolSICmdType.DATA,logintxt);
+            networkStream.Write(packet, 0, packet.Length);
+            //var user = UsersData.user.FirstOrDefault(u => u.Username == username && u.Password == password);
+            /*    
             if (user == null)
             {
                 lblinvalidUser.Visible = true;
@@ -119,17 +144,16 @@ namespace ProjetoTS
             }
             else
             {
-                MessageBox.Show("Login successful" + user.Username + "passwrd: " + user.Password);
-                BaseApp temp = new BaseApp();
-
+                //MessageBox.Show("Login successful" + user.Username + "passwrd: " + user.Password);
+               BaseApp temp = new BaseApp();
                 temp.Region = this.Region;
-
                 temp.Show();
-
                 this.Hide();
+                
             }
+            */
 
-        
+
 
 
 
@@ -151,7 +175,7 @@ namespace ProjetoTS
             */
         }
 
-       
+
 
         private void btnClose_Click_1(object sender, EventArgs e)
         {
@@ -203,14 +227,14 @@ namespace ProjetoTS
             */
             using (var userdb = new UsersData())
             {
-
+                /*
                 var user = new user { Username = textBoxUserSignUp.Text, Password = textBoxPasswordSignUp.Text, SingUpDate = DateTime.Now };
                 userdb.user.Add(user);
 
 
                 userdb.SaveChanges();
 
-
+                */
             }
         }
 
