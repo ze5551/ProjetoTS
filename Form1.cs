@@ -168,6 +168,10 @@ namespace ProjetoTS
                 if(MSG != null)
                 {
                     var = false;
+                   BaseApp temp = new BaseApp();
+                    temp.Region = this.Region;
+                    temp.Show();
+                    this.Hide();
                 }
                 else
                 {
@@ -306,6 +310,10 @@ namespace ProjetoTS
                 if (MSG != null)
                 {
                     var = false;
+                    pnlLogin.Visible = true;
+                    pnlLogin.Dock = DockStyle.Fill;
+                    pnlSignUp.Visible = false;
+                    pnlLogo.Dock = DockStyle.Left;
                 }
                 else
                 {

@@ -64,9 +64,9 @@
             this.LBLContactName.AutoSize = true;
             this.LBLContactName.Location = new System.Drawing.Point(77, 10);
             this.LBLContactName.Name = "LBLContactName";
-            this.LBLContactName.Size = new System.Drawing.Size(44, 16);
+            this.LBLContactName.Size = new System.Drawing.Size(87, 16);
             this.LBLContactName.TabIndex = 3;
-            this.LBLContactName.Text = "label1";
+            this.LBLContactName.Text = "Contacto xxxx";
             // 
             // BTNSend
             // 
@@ -74,7 +74,7 @@
             this.BTNSend.Name = "BTNSend";
             this.BTNSend.Size = new System.Drawing.Size(75, 46);
             this.BTNSend.TabIndex = 2;
-            this.BTNSend.Text = "button1";
+            this.BTNSend.Text = "Enviar Mensagem";
             this.BTNSend.UseVisualStyleBackColor = true;
             // 
             // TBMsg
@@ -103,9 +103,9 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(13, 13);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(44, 16);
+            this.label1.Size = new System.Drawing.Size(67, 16);
             this.label1.TabIndex = 2;
-            this.label1.Text = "label1";
+            this.label1.Text = "Contactos";
             // 
             // BaseApp
             // 
