@@ -124,131 +124,143 @@ namespace Server
         private void threadHandler()
         {
             // Definição das variáveis networkStream e protocolSI
-            NetworkStream networkStream = this.client.GetStream();
-            ProtocolSI protocolSI = new ProtocolSI();
+            
             bool isLogedIn = false;
             // Ciclo a ser executado até ao fim da transmissão.
+            bool rotate = true;
 
+            bool stayConnected = true;
+            NetworkStream networkStream = this.client.GetStream();
+            ProtocolSI protocolSI = new ProtocolSI();
             do
             {
-                int bytesRead = networkStream.Read(protocolSI.Buffer, 0, protocolSI.Buffer.Length);
-                byte[] ack;
-
-                // "Alteração"/mudança entre a apresentação da mensagem e o fim da tranmissão.
-
-                //Dica do ALT
-
-                UsersDataServer UsersDataServer = new UsersDataServer();
-                var UserServerDB = new UsersDataServer();
-                Console.WriteLine("Client " + clientID + ": " + protocolSI.GetStringFromData());
-                string received = protocolSI.GetStringFromData();
-                string[] dados = received.Split(',');
-                string Username = dados[0];
-                string Password = dados[1];
-                string LoginOrRegister = dados[2];
-                int Var = 0;
-                var user = UsersDataServer.UserServer.FirstOrDefault(u => u.Username == Username && u.Password == Password);
-                switch (LoginOrRegister)
+                
+                
+                do
                 {
-                    case "1":
-                        
-                        if (user == null)
-                        {
+                    int bytesRead = networkStream.Read(protocolSI.Buffer, 0, protocolSI.Buffer.Length);
 
-                            Var = 0;
-                            isLogedIn = false;
-                            byte[] packet = protocolSI.Make(ProtocolSICmdType.DATA, Var);
-                            networkStream.Write(packet, 0, packet.Length);
+                    // "Alteração"/mudança entre a apresentação da mensagem e o fim da tranmissão.
+
+                    //Dica do ALT
+                    Console.WriteLine("Client " + clientID + ": " + protocolSI.GetStringFromData());
+                    string received = protocolSI.GetStringFromData();
+                    string[] dados = received.Split(',');
+                    string Username = dados[0];
+                    string Password = dados[1];
+                    UsersDataServer UsersDataServer = new UsersDataServer();
+                    var UserServerDB = new UsersDataServer();
+                    
+                    string LoginOrRegister = dados[2];
+                    int Var = 0;
+                    
+                    var user = UsersDataServer.UserServer.FirstOrDefault(u => u.Username == Username && u.Password == Password);
+                    switch (LoginOrRegister)
+                    {
+                        case "1":
+
+                            if (user == null)
+                            {
+
+                                Var = 0;
+                                isLogedIn = false;
+                                byte[] packet = protocolSI.Make(ProtocolSICmdType.DATA, Var);
+                                networkStream.Write(packet, 0, packet.Length);
+                                break;
+
+
+
+                            }
+                            else
+                            {
+                                //MessageBox.Show("Login successful" + user.Username + "passwrd: " + user.Password);
+                                Var = 1;
+                                isLogedIn = true;
+                                byte[] packet = protocolSI.Make(ProtocolSICmdType.DATA, Var);
+                                networkStream.Write(packet, 0, packet.Length);
+
+
+                            }
+                            //Login
 
                             break;
+                        case "0":
+                            using (var UserServerdb = new UsersDataServer())
+                            {
+
+                                var UserServer = new UserServer { Username = Username, Password = Password, SingUpDate = DateTime.Now };
+                                UserServerdb.UserServer.Add(UserServer);
+                                
+                                UserServerdb.SaveChanges();
+                                //networkStream.Close();
+                                //client.Close();
+                               
 
 
-                            
-                        }
-                        else
-                        {
-                            //MessageBox.Show("Login successful" + user.Username + "passwrd: " + user.Password);
-                            Var = 1;
-                            isLogedIn = true;
-                            byte[] packet = protocolSI.Make(ProtocolSICmdType.DATA, Var);
-                            networkStream.Write(packet, 0, packet.Length);
-
-                        }
-                        //Login
-
-                        break;
-                    case "0":
-                        using (var UserServerdb = new UsersDataServer())
-                        {
-                            
-                            var UserServer = new UserServer { Username = Username, Password = Password, SingUpDate = DateTime.Now };
-                            UserServerdb.UserServer.Add(UserServer);
-
-
-                            UserServerdb.SaveChanges();
-                           
-
-                        }
-                        //Registo
-                        isLogedIn = false;
-                        break;
-                }
-                
-
-                
-                Console.WriteLine("Client " + clientID + ": " + protocolSI.GetStringFromData());
-
-            } while (!isLogedIn);
+                            }
+                            Var = 2;
+                            byte[] packet3 = protocolSI.Make(ProtocolSICmdType.DATA, Var);
+                            networkStream.Write(packet3, 0, packet3.Length);
+                            //Registo
+                            rotate = false;
+                            break;
+                    }
 
 
 
-                        /*
-                        UsersDataServer UsersDataServer = new UsersDataServer();
-                        var UserServerDB = new UsersDataServer();
-                        switch (LoginOrRegister)
-                        {
-                            case "1":
-                                var user = UsersDataServer.UserServer.FirstOrDefault(u => u.Username == Username && u.Password == Password);
-                                if (user == null)
-                                {
+                    Console.WriteLine("Client " + clientID + ": " + protocolSI.GetStringFromData());
 
-                                    Var = 0;
-                                    byte[] packet = protocolSI.Make(ProtocolSICmdType.DATA, Var);
-                                    networkStream.Write(packet, 0, packet.Length);
-                                }
-                                else
-                                {
-                                    //MessageBox.Show("Login successful" + user.Username + "passwrd: " + user.Password);
-                                    Var = 1;
+                } while (rotate);
+            } while (stayConnected);
 
 
-                                }
-                                //Login
+            /*
+            UsersDataServer UsersDataServer = new UsersDataServer();
+            var UserServerDB = new UsersDataServer();
+            switch (LoginOrRegister)
+            {
+                case "1":
+                    var user = UsersDataServer.UserServer.FirstOrDefault(u => u.Username == Username && u.Password == Password);
+                    if (user == null)
+                    {
 
-                                break;
-                            case "0":
-                                //Registo
-                                break;
-                        }*/
+                        Var = 0;
+                        byte[] packet = protocolSI.Make(ProtocolSICmdType.DATA, Var);
+                        networkStream.Write(packet, 0, packet.Length);
+                    }
+                    else
+                    {
+                        //MessageBox.Show("Login successful" + user.Username + "passwrd: " + user.Password);
+                        Var = 1;
 
 
-                    //verifica base de dados
+                    }
+                    //Login
+
+                    break;
+                case "0":
+                    //Registo
+                    break;
+            }*/
 
 
-                    //servidor envia um "1" para autentificar login ou 0 para credenciais erradas
+            //verifica base de dados
+
+
+            //servidor envia um "1" para autentificar login ou 0 para credenciais erradas
 
 
 
 
-                    //UserServer.Username = Username;
-                    //UserServer.Password = Password;
-                    //Console.WriteLine(UserServer.Username+ " Password: "+UserServer.Password);
+            //UserServer.Username = Username;
+            //UserServer.Password = Password;
+            //Console.WriteLine(UserServer.Username+ " Password: "+UserServer.Password);
 
 
 
 
 
-            
+
 
             // Fecho do networkStream e do cliente (TcpClient)
             //networkStream.Close();
