@@ -44,5 +44,15 @@ namespace ProjetoTS
         {
 
         }
+
+        private void BTNSend_Click(object sender, EventArgs e)
+        {
+                
+        }
+
+        private void btnClose_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
     }
 }

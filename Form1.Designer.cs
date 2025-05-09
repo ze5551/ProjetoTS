@@ -114,7 +114,7 @@
             this.panelNavbar.Location = new System.Drawing.Point(0, 0);
             this.panelNavbar.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.panelNavbar.Name = "panelNavbar";
-            this.panelNavbar.Padding = new System.Windows.Forms.Padding(5, 5, 5, 5);
+            this.panelNavbar.Padding = new System.Windows.Forms.Padding(5);
             this.panelNavbar.Size = new System.Drawing.Size(1224, 49);
             this.panelNavbar.TabIndex = 0;
             this.panelNavbar.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panelNavbar_MouseDown);
@@ -406,7 +406,7 @@
             this.linkLabelAlreadyHaveAccount.AutoSize = true;
             this.linkLabelAlreadyHaveAccount.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.linkLabelAlreadyHaveAccount.LinkColor = System.Drawing.Color.White;
-            this.linkLabelAlreadyHaveAccount.Location = new System.Drawing.Point(307, 402);
+            this.linkLabelAlreadyHaveAccount.Location = new System.Drawing.Point(295, 413);
             this.linkLabelAlreadyHaveAccount.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.linkLabelAlreadyHaveAccount.Name = "linkLabelAlreadyHaveAccount";
             this.linkLabelAlreadyHaveAccount.Size = new System.Drawing.Size(183, 20);
@@ -421,7 +421,7 @@
             this.btnSignUp.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Lime;
             this.btnSignUp.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnSignUp.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnSignUp.Location = new System.Drawing.Point(304, 436);
+            this.btnSignUp.Location = new System.Drawing.Point(265, 446);
             this.btnSignUp.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btnSignUp.Name = "btnSignUp";
             this.btnSignUp.Size = new System.Drawing.Size(243, 50);
@@ -704,7 +704,7 @@
             // 
             this.pictureBox3.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox3.Image")));
             this.pictureBox3.Location = new System.Drawing.Point(34, 123);
-            this.pictureBox3.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBox3.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBox3.Name = "pictureBox3";
             this.pictureBox3.Size = new System.Drawing.Size(305, 250);
             this.pictureBox3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
